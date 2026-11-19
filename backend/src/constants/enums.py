@@ -1,3 +1,6 @@
 ROLES=('admin','operator','viewer')
 STATUSES=('queued','running','completed','failed')
 OPERATORS=('scan','filter','hash_join','group')
+DRAFT_STATUSES=('open','trial_completed','published')
+DRAFT_CHANGE_OPS=('insert','update','delete')
+DRAFT_FAILURE_REASONS=('row_conflict','result_drift')

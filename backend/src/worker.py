@@ -7,6 +7,7 @@ from src.models.plan import Plan
 from src.models.trace import Trace
 from src.services.operators import execute
 from src.services.audit import log
+from src.services.sampling import strip_row_id
 q=redis.Redis.from_url(REDIS_URL)
 while True:
  Path('/tmp/worker-heartbeat').touch()
@@ -19,7 +20,7 @@ while True:
    if not row or row.status!='queued':continue
    row.status='running';snapshot=row.snapshot;s.commit()
   try:
-   result=execute(snapshot['dataset'],snapshot['plan']['steps'])
+   result=execute(strip_row_id(snapshot['dataset']),snapshot['plan']['steps'])
    with Session() as s:r=s.get(Trace,run_id);r.result=result;r.status='completed';s.commit()
    log('worker','trace.completed',str(run_id))
   except Exception as exc:

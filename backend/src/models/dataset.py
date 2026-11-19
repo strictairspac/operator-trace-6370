@@ -7,3 +7,4 @@ class Dataset(Base):
  description=Column(String(500),nullable=False,default='')
  sensors=Column(JSON,nullable=False)
  readings=Column(JSON,nullable=False)
+ version=Column(Integer,nullable=False,server_default='1',default=1)

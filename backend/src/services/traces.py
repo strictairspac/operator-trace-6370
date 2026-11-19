@@ -19,7 +19,9 @@ def create(data):
   p=s.get(Plan,data.plan_id)
   if not p:raise HTTPException(404,'未找到算子计划')
   d=s.get(Dataset,p.dataset_id)
-  row=Trace(name=data.name,plan_id=p.id,dataset_id=d.id,status='queued',snapshot={'dataset':record(d),'plan':record(p)})
+  ds=record(d)
+  row=Trace(name=data.name,plan_id=p.id,dataset_id=d.id,status='queued',
+   snapshot={'dataset':ds,'plan':record(p),'dataset_version':ds.get('version',1)})
   s.add(row);s.commit();s.refresh(row);result=record(row)
  try:queue.rpush('operator-traces',result['id'])
  except redis.RedisError:
